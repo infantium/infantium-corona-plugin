@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.mycompany.app"
+          package="com.infantium.corona.testapp"
           android:versionCode="1"
           android:versionName="1.0"
 	      android:installLocation="auto">
@@ -13,6 +13,7 @@
 	
 	<!-- Permissions required by this app. -->
 	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	
 	<!-- Informs the app store that this app requires OpenGL ES 2.0 as a minimum. Required by Corona. -->
 	<uses-feature android:glEsVersion="0x00020000"/>
@@ -58,7 +59,7 @@
 		
 		<!-- Corona content provider required by the video player and mail app to access this app's local files. -->
 		<provider android:name="com.ansca.corona.storage.FileContentProvider"
-		          android:authorities="com.mycompany.app.files"
+		          android:authorities="com.infantium.corona.testapp.files"
 		          android:exported="true" />
 		
 		<!-- Corona service used to perform background operations such as managing notifications. -->
@@ -86,7 +87,7 @@
 			<intent-filter>
 				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
 				<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-				<category android:name="com.mycompany.app" />
+				<category android:name="com.infantium.corona.testapp" />
 			</intent-filter>
 		</receiver>
 

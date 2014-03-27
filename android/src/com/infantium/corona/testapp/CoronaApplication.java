@@ -1,11 +1,10 @@
 //
 //  CoronaApplication.java
-//  TemplateApp
 //
-//  Copyright (c) 2014 __MyCompanyName__. All rights reserved.
+//  MIT License 2014 Infantium.
 //
 
-package com.infantium.app;
+package com.infantium.corona.testapp;
 
 /**
  * Extends the Application class to receive Corona runtime events and to extend the Lua API.

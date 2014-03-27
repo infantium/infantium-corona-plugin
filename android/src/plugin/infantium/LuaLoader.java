@@ -1,12 +1,10 @@
 //
 //  LuaLoader.java
-//  TemplateApp
 //
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  MIT License 2014 Infantium.
 //
 
-// This corresponds to the name of the Lua library,
-// e.g. [Lua] require "plugin.library"
+// This corresponds to the name of the Lua library
 package plugin.infantium;
 
 import android.app.Activity;
@@ -22,6 +20,14 @@ import com.ansca.corona.CoronaLua;
 import com.ansca.corona.CoronaRuntime;
 import com.ansca.corona.CoronaRuntimeListener;
 
+import android.os.Handler;
+import java.lang.Runnable;
+
+import plugin.infantium.functions.InitFunction;
+import plugin.infantium.functions.ShowFunction;
+
+import com.infantium.android.sdk.InfantiumSDK;
+
 
 /**
  * Implements the Lua interface for a Corona plugin.
@@ -31,14 +37,23 @@ import com.ansca.corona.CoronaRuntimeListener;
  */
 public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	/** Lua registry ID to the Lua function to be called when the ad request finishes. */
-	private int fListener;
+	public static int fListener;
 
 	/** This corresponds to the event name, e.g. [Lua] event.name */
 	private static final String EVENT_NAME = "plugininfantiumevent";
 
 	// Log TAG
 	private static final String LOG_TAG = "Infantium Corona Plugin";
+	
+	// Infantium SDK
+	public static InfantiumSDK infantium;
 
+	private InfantiumSDK getInfantium() {
+		if(infantium==null) {
+			infantium = InfantiumSDK.getInfantiumSDK(CoronaEnvironment.getApplicationContext());
+		}
+		return infantium;
+	}
 
 	/**
 	 * Creates a new Lua interface to this plugin.
@@ -54,6 +69,19 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 		// Set up this plugin to listen for Corona runtime events to be received by methods
 		// onLoaded(), onStarted(), onSuspended(), onResumed(), and onExiting().
 		CoronaEnvironment.addRuntimeListener(this);
+		
+		CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
+		Handler handler = activity.getHandler();
+		
+		Log.i(LOG_TAG, "Received '" + handler.postAtFrontOfQueue(new Runnable() {
+			
+			@Override
+			public void run () {
+				Log.d(LOG_TAG, "Started loading Runnable on LuaLoader()...");
+				infantium = InfantiumSDK.getInfantiumSDK(CoronaEnvironment.getApplicationContext());
+				Log.d(LOG_TAG, "... and finished loading Runnable on LuaLoader()");
+			}
+		}) + "' when sending the runnable.");
 	}
 
 	/**
@@ -72,8 +100,8 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	public int invoke(LuaState L) {
 		// Register this plugin into Lua with the following functions.
 		NamedJavaFunction[] luaFunctions = new NamedJavaFunction[] {
-			new InitWrapper(),
-			new ShowWrapper(),
+			new InitFunction(),
+			new ShowFunction(),
 		};
 		String libName = L.toString( 1 );
 		L.register(libName, luaFunctions);
@@ -95,7 +123,7 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 		// This is because this listener cannot be added to the CoronaEnvironment until after
 		// this plugin has been required-in by Lua, which occurs after the onLoaded() event.
 		// However, this method will be called when a 2nd Corona activity has been created.
-		Log.w(LOG_TAG, "onLoaded called.");
+		//Log.d(LOG_TAG, "onLoaded called.");
 	}
 
 	/**
@@ -106,7 +134,6 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	 */
 	@Override
 	public void onStarted(CoronaRuntime runtime) {
-		Log.w(LOG_TAG, "onStarted called.");
 	}
 
 	/**
@@ -119,7 +146,9 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	 */
 	@Override
 	public void onSuspended(CoronaRuntime runtime) {
-		Log.w(LOG_TAG, "onSuspended called.");
+		Log.d(LOG_TAG, "Calling onPauseInfantium.");
+		//getInfantium().onPauseInfantium();
+		infantium.onPauseInfantium();
 	}
 
 	/**
@@ -130,7 +159,21 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	 */
 	@Override
 	public void onResumed(CoronaRuntime runtime) {
-		Log.w(LOG_TAG, "onResumed called.");
+		Log.d(LOG_TAG, "Calling onResumeInfantium.");
+		infantium.onResumeInfantium();
+		//getInfantium().onResumeInfantium();
+		//CoronaActivity activity = CoronaEnvironment.getCoronaActivity();
+		//Handler handler = activity.getHandler();
+		
+		//handler.post(new Runnable() {
+			
+		//	@Override
+		//	public void run () {
+		//		Log.d(LOG_TAG, "Calling Runnable onResumeInfantium.");
+		//		infantium = InfantiumSDK.getInfantiumSDK(CoronaEnvironment.getApplicationContext());
+		//		infantium.onResumeInfantium();
+		//	}
+		//});
 	}
 
 	/**
@@ -148,7 +191,8 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 		// Remove the Lua listener reference.
 		CoronaLua.deleteRef( runtime.getLuaState(), fListener );
 		fListener = CoronaLua.REFNIL;
-		Log.w(LOG_TAG, "onExiting called.");
+		Log.d(LOG_TAG, "Called onExiting. Calling onPauseInfantium.");
+		infantium.onPauseInfantium();
 	}
 
 	/**
@@ -157,7 +201,7 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	 * Warning! This method is not called on the main thread.
 	 * @param L Reference to the Lua state that the Lua function was called from.
 	 * @return Returns the number of values to be returned by the library.init() function.
-	 */
+	 *
 	public int init(LuaState L) {
 		int listenerIndex = 1;
 
@@ -167,6 +211,7 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 
 		return 0;
 	}
+	*/
 
 	/**
 	 * The following Lua function has been called:  library.show( word )
@@ -174,7 +219,7 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	 * Warning! This method is not called on the main thread.
 	 * @param L Reference to the Lua state that the Lua function was called from.
 	 * @return Returns the number of values to be returned by the library.show() function.
-	 */
+	 *
 	public int show(LuaState L) {
 		// Fetch a reference to the Corona activity.
 		// Note: Will be null if the end-user has just backed out of the activity.
@@ -223,13 +268,14 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 
 		return 0;
 	}
+	*/
 
-	/** Implements the library.init() Lua function. */
+	/** Implements the library.init() Lua function. *
 	private class InitWrapper implements NamedJavaFunction {
 		/**
 		 * Gets the name of the Lua function as it would appear in the Lua script.
 		 * @return Returns the name of the custom Lua function.
-		 */
+		 *
 		@Override
 		public String getName() {
 			return "init";
@@ -242,19 +288,20 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 		 * @param luaState Reference to the Lua state.
 		 *                 Needed to retrieve the Lua function's parameters and to return values back to Lua.
 		 * @return Returns the number of values to be returned by the Lua function.
-		 */
+		 *
 		@Override
 		public int invoke(LuaState L) {
 			return init(L);
 		}
 	}
+	*/
 
-	/** Implements the library.show() Lua function. */
+	/** Implements the library.show() Lua function. *
 	private class ShowWrapper implements NamedJavaFunction {
 		/**
 		 * Gets the name of the Lua function as it would appear in the Lua script.
 		 * @return Returns the name of the custom Lua function.
-		 */
+		 *
 		@Override
 		public String getName() {
 			return "show";
@@ -267,10 +314,11 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 		 * @param luaState Reference to the Lua state.
 		 *                 Needed to retrieve the Lua function's parameters and to return values back to Lua.
 		 * @return Returns the number of values to be returned by the Lua function.
-		 */
+		 *
 		@Override
 		public int invoke(LuaState L) {
 			return show(L);
 		}
 	}
+	*/
 }

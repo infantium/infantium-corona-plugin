@@ -19,12 +19,13 @@ adb install -r $APK_NAME
 
 if [ ! -z "$2" ]
 then
-	adb shell am start -n $2
+	adb shell am force-stop $2
+	adb shell am start -n "$2/$3"
 else
 	echo '####################################################'
         echo '## APK not launched. Pass the APK package name    ##'
         echo '## and activity name in the following format:     ##'
-	echo '## "packagename/activityname" to get it launched. ##'
+	echo '## "packagename activityname" to get it launched. ##'
         echo '####################################################'
 	exit -1
 fi
