@@ -4,7 +4,6 @@ import android.util.Log;
 import com.naef.jnlua.LuaState;
 import com.naef.jnlua.NamedJavaFunction;
 import com.ansca.corona.CoronaLua;
-import com.ansca.corona.CoronaEnvironment;
 
 import com.infantium.android.sdk.InfantiumSDK;
 
@@ -12,22 +11,10 @@ import plugin.infantium.LuaLoader;
 
 /** Implements the infantium.init() Lua function. */
 public class InitFunction implements NamedJavaFunction {
-
-	/** This corresponds to the event name, e.g. [Lua] event.name */
-	private static final String EVENT_NAME = "plugininfantiumevent";
+	private static final String FUNCTION_NAME = "InitFunction";
 
 	// Log TAG
 	private static final String LOG_TAG = "Infantium Corona Plugin";
-	
-	// Infantium SDK
-	private static InfantiumSDK infantium;
-
-	private InfantiumSDK getInfantium() {
-		if(infantium==null) {
-			infantium = InfantiumSDK.getInfantiumSDK(CoronaEnvironment.getApplicationContext());
-		}
-		return infantium;
-	}
 	
 	/**
 	 * Gets the name of the Lua function as it would appear in the Lua script.
@@ -35,7 +22,7 @@ public class InitFunction implements NamedJavaFunction {
 	 */
 	@Override
 	public String getName() {
-		//Log.d(LOG_TAG, "InitFunction getName called.");
+		//Log.d(LOG_TAG, FUNCTION_NAME + " getName called.");
 		return "init";
 	}
 	
@@ -49,30 +36,17 @@ public class InitFunction implements NamedJavaFunction {
 	 */
 	@Override
 	public int invoke(LuaState L) {
-		//Log.d(LOG_TAG, "InitFunction invoke called.");
+		//Log.d(LOG_TAG, FUNCTION_NAME + " invoke called.");
 		return init(L);
 	}
 	
 	/**
-	 * The following Lua function has been called:  library.init( listener )
-	 * <p>
-	 * Warning! This method is not called on the main thread.
-	 * @param L Reference to the Lua state that the Lua function was called from.
-	 * @return Returns the number of values to be returned by the library.init() function.
+	 * Method which implements the function logic.
 	 */
-	public int init(LuaState L) {	
-		Log.d(LOG_TAG, "InitFunction called");
-		LuaLoader.infantium.onResumeInfantium();
-		
+	public int init(LuaState L) {
+		LuaLoader.infantium.onResumeInfantium();		
 		Log.i(LOG_TAG, "Loaded InfantiumSDK. Version: " + InfantiumSDK.version);
-		int listenerIndex = 1;
-
-		if ( CoronaLua.isListener( L, listenerIndex, EVENT_NAME ) ) {
-			LuaLoader.fListener = CoronaLua.newRef( L, listenerIndex );
-		}
 		
-		LuaLoader.infantium.setDeveloperCredentials("User!", "API_KEYYYYY");
-		Log.d(LOG_TAG, "setDeveloperCredentials called");
 		return 0;
 	}
 }

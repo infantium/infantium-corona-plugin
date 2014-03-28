@@ -23,8 +23,7 @@ import com.ansca.corona.CoronaRuntimeListener;
 import android.os.Handler;
 import java.lang.Runnable;
 
-import plugin.infantium.functions.InitFunction;
-import plugin.infantium.functions.ShowFunction;
+import plugin.infantium.functions.*;
 
 import com.infantium.android.sdk.InfantiumSDK;
 
@@ -101,7 +100,26 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 		// Register this plugin into Lua with the following functions.
 		NamedJavaFunction[] luaFunctions = new NamedJavaFunction[] {
 			new InitFunction(),
-			new ShowFunction(),
+			new SetDeveloperCredentialsFunction(),
+			new SetDeviceInfoFunction(),
+			new SetContentAppFunction(),
+			new SetSubcontentFunction(),
+			new CreateGameplayFunction(),
+			new CloseGameplayFunction(),
+			new AddElementFunction(),
+			new AddNumberElementFunction(),
+			new AddTextElementFunction(),
+			new AddShapeElementFunction(),
+			new AddPaintedElementFunction(),
+			new AddPictureElementFunction(),
+			new AddGoalFunction(),
+			new AddSelectionGoalFunction(),
+			new AddMatchingGoalFunction(),
+			new AddTappingGoalFunction(),
+			new StartPlayingFunction(),
+			new NewBasicInteractionFunction(),
+			new SendGameRawdataFunction(),
+			new ReturnToInfantiumAppFunction()
 		};
 		String libName = L.toString( 1 );
 		L.register(libName, luaFunctions);
