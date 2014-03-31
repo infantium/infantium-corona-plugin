@@ -102,7 +102,7 @@ checkError
 if [ -f "$path/bin/${PLUGIN_NAME}.jar" ]
 then
 	# Remove non-plugin related code
-	zip -d "$path/bin/${PLUGIN_NAME}.jar" "com/*"
+	# zip -d "$path/bin/${PLUGIN_NAME}.jar" "com/*"
 
 	echo "SUCCESS: Plugin binary is located at: '$path/bin/${PLUGIN_NAME}.jar'"
 else

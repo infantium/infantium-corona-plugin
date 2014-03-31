@@ -82,10 +82,11 @@ public class AddTextElementFunction implements NamedJavaFunction {
 
 			resp = LuaLoader.infantium.addElement(ele);
 
-			if(InfantiumResponse.Valid.equals(resp))
+			if(InfantiumResponse.Valid.equals(resp)) {
 				if(Conf.D) Log.i(LOG_TAG, FUNCTION_NAME + " successful.");
-			else
+			} else {
 				Log.e(LOG_TAG, FUNCTION_NAME + " failed: " + resp.toString() + ".");
+			}
 				
 			L.pushString(resp.toString());
 			return 1;

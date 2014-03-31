@@ -2,7 +2,8 @@ local infantium = require "plugin.infantium"
 
 timer.performWithDelay( 500, function()
 	-- Set up
-	infantium.init()
+	infantium.init("api", true)
+	infantium.setDeveloperCredentials("androidSDK","585f946642aac847403bf6743f918892eac695f6")
 	infantium.setDeveloperCredentials("username","0000000000000000000000000000000000000000")
 	infantium.setDeviceInfo(500, 800)
 	infantium.setContentAppUUID("00000000000000000000000000000000")
@@ -54,3 +55,6 @@ timer.performWithDelay( 4500, function()
 	infantium.closeGameplay()
 end )
 
+local button = display.newImage( "infantium_logo.png" )
+button.x = display.contentWidth / 2
+button.y = 50

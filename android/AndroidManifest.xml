@@ -28,7 +28,7 @@
 	 The "label" attribute sets the name of the application as how it is shown to the end-user.
 	 -->
 	<application android:name="CoronaApplication"
-	             android:label="App"
+	             android:label="Infantium Corona App"
 	             android:hardwareAccelerated="true"
 	             android:debuggable="true">
 		

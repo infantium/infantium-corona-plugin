@@ -57,10 +57,11 @@ public class SetContentAppFunction implements NamedJavaFunction {
 			
 			resp = LuaLoader.infantium.setContentAppUUID(contentapp_uuid);
 
-			if(InfantiumResponse.Valid.equals(resp))
+			if(InfantiumResponse.Valid.equals(resp)) {
 				if(Conf.D) Log.i(LOG_TAG, FUNCTION_NAME + " successful.");
-			else
+			} else {
 				Log.e(LOG_TAG, FUNCTION_NAME + " failed: " + resp.toString() + ".");
+			}
 
 			L.pushString(resp.toString());
 			return 1;

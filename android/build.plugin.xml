@@ -91,6 +91,9 @@
             <mkdir dir="libs" />
             <copy file="${CoronaEnterpriseDir}/Corona/android/lib/Corona/libs/JNLua.jar" todir="libs" />
             <copy file="${CoronaEnterpriseDir}/Corona/android/lib/Corona/libs/Corona.jar" todir="libs" />
+            <copy file="./dependencies/android-async-http-1.4.3.jar" todir="libs" />
+            <copy file="./dependencies/InfantiumSDK.jar" todir="libs" />
+            <copy file="./dependencies/sqlitejdbc-v056.jar" todir="libs" />
         </sequential>
     </macrodef>
 
@@ -100,6 +103,17 @@
     </target>
 
     <target name="-post-build">
-        <copy file="bin/classes.jar" tofile="bin/${CoronaPluginName}.jar" />
+		<!-- <copy file="bin/classes.jar" tofile="bin/${CoronaPluginName}.jar" />-->
+		
+		<mkdir dir="bin/pre_merged" />
+        <copy file="bin/classes.jar" tofile="bin/pre_merged/${CoronaPluginName}_standalone.jar" />
+        <copy file="./dependencies/android-async-http-1.4.3.jar" todir="bin/pre_merged" />
+        <copy file="./dependencies/InfantiumSDK.jar" todir="bin/pre_merged" />
+        <copy file="./dependencies/sqlitejdbc-v056.jar" todir="bin/pre_merged" />
+		<jar destfile="bin/${CoronaPluginName}.jar">
+		  <zipgroupfileset dir="bin/pre_merged" includes="*.jar" /> 
+		  <!-- other options -->
+		</jar>
+		
     </target>
 </project>

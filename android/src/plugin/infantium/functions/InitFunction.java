@@ -3,7 +3,9 @@ package plugin.infantium.functions;
 import android.util.Log;
 import com.naef.jnlua.LuaState;
 import com.naef.jnlua.NamedJavaFunction;
+import com.naef.jnlua.LuaRuntimeException;
 import com.ansca.corona.CoronaLua;
+import com.ansca.corona.CoronaEnvironment;
 
 import com.infantium.android.sdk.InfantiumSDK;
 
@@ -11,7 +13,7 @@ import plugin.infantium.LuaLoader;
 
 /** Implements the infantium.init() Lua function. */
 public class InitFunction implements NamedJavaFunction {
-	private static final String FUNCTION_NAME = "InitFunction";
+	private static final String FUNCTION_NAME = "init";
 
 	// Log TAG
 	private static final String LOG_TAG = "Infantium Corona Plugin";
@@ -23,7 +25,7 @@ public class InitFunction implements NamedJavaFunction {
 	@Override
 	public String getName() {
 		//Log.d(LOG_TAG, FUNCTION_NAME + " getName called.");
-		return "init";
+		return FUNCTION_NAME;
 	}
 	
 	/**
@@ -44,8 +46,38 @@ public class InitFunction implements NamedJavaFunction {
 	 * Method which implements the function logic.
 	 */
 	public int init(LuaState L) {
-		LuaLoader.infantium.onResumeInfantium();		
-		Log.i(LOG_TAG, "Loaded InfantiumSDK. Version: " + InfantiumSDK.version);
+		try {
+			if (!L.isString(1))
+				return 0;
+			String server = L.checkString(1);
+			Boolean debug = L.toBoolean(2);
+
+			if (server != null && debug != null) {
+				if("api".equals(server)) {
+					LuaLoader.infantium.getInfantiumSDK(null, "api", debug);
+				} else {
+					server = "beta";
+					LuaLoader.infantium.getInfantiumSDK(null, "beta", debug);
+				}
+				Log.i(LOG_TAG, FUNCTION_NAME + " called with Conf parameters: {'server': '" + server + "', 'debug': " + debug + "}");
+			}
+
+			LuaLoader.infantium.onResumeInfantium();	
+			Log.i(LOG_TAG, "Loaded InfantiumSDK. Version: " + InfantiumSDK.version);
+			
+			return 0;
+			
+		} catch (LuaRuntimeException lre) {
+			Log.e(LOG_TAG, FUNCTION_NAME + " failed with LuaRuntimeException: " + lre.getMessage());
+			
+		} catch (IllegalArgumentException iae) {
+			Log.e(LOG_TAG, FUNCTION_NAME + " failed with IllegalArgumentException: " + iae.getMessage() + "." +
+				"This may be due to sending a parameter of a different type or less parameters than required.");
+			
+		} catch (Exception e) {
+			Log.e(LOG_TAG, FUNCTION_NAME + " failed with Exception " + e.getClass().getName() + ": " + e.getMessage());
+			
+		}
 		
 		return 0;
 	}
