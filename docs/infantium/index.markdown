@@ -1,9 +1,9 @@
-# PLUGIN_NAME.*
+# infantium.*
 
 > --------------------- ------------------------------------------------------------------------------------------
 > __Type__              [library][api.type.library]
 > __Revision__          [REVISION_LABEL](REVISION_URL)
-> __Keywords__          PLUGIN_NAME
+> __Keywords__          infantium
 > __Sample code__       
 > __See also__          
 > __Availability__      Basic, Pro, Enterprise
@@ -32,9 +32,47 @@ To use the Infantium service, please [sign up](http://www.infantium.com) for an 
 
 ## Functions
 
-#### [PLUGIN_NAME.FUNCTION()][plugin.PLUGIN_NAME.FUNCTION]
+#### [infantium.addElement()][plugin.infantium.addElement]
 
-#### [PLUGIN_NAME.PROPERTY][plugin.PLUGIN_NAME.PROPERTY]
+#### [infantium.addGoal()][plugin.infantium.addGoal]
+
+#### [infantium.addMatchingGoal()][plugin.infantium.addMatchingGoal]
+
+#### [infantium.addNumberElement()][plugin.infantium.addNumberElement]
+
+#### [infantium.addPaintedElement()][plugin.infantium.addPaintedElement]
+
+#### [infantium.addPictureElement()][plugin.infantium.addPictureElement]
+
+#### [infantium.addSelectionGoal()][plugin.infantium.addSelectionGoal]
+
+#### [infantium.addShapeElement()][plugin.infantium.addShapeElement]
+
+#### [infantium.addTappingGoal()][plugin.infantium.addTappingGoal]
+
+#### [infantium.addTextElement()][plugin.infantium.addTextElement]
+
+#### [infantium.closeGameplay()][plugin.infantium.closeGameplay]
+
+#### [infantium.createGameplay()][plugin.infantium.createGameplay]
+
+#### [infantium.init()][plugin.infantium.init]
+
+#### [infantium.newBasicInteraction()][plugin.infantium.newBasicInteraction]
+
+#### [infantium.returnToInfantiumApp()][plugin.infantium.returnToInfantiumApp]
+
+#### [infantium.sendGameRawdata()][plugin.infantium.sendGameRawdata]
+
+#### [infantium.setContentAppUUID()][plugin.infantium.setContentAppUUID]
+
+#### [infantium.setDeveloperCredentials()][plugin.infantium.setDeveloperCredentials]
+
+#### [infantium.setDeviceInfo()][plugin.infantium.setDeviceInfo]
+
+#### [infantium.setSubContentUUID()][plugin.infantium.setSubContentUUID]
+
+#### [infantium.startPlaying()][plugin.infantium.startPlaying]
 
 ## Project Settings
 
@@ -70,13 +108,13 @@ local infantium = require "plugin.infantium"
 
 ## Sample Code
 
-You can access sample code [here](https://github.com/infantium/infantium-corona-example/blob/master/Corona/main.lua).
+You can access sample code [in our example Enterprise app](https://github.com/infantium/infantium-corona-example/blob/master/Corona/main.lua).
 
 ## Support
 
 More support is available from the Infantium team:
 
 * [E-mail](mailto://partnerships@infantium.com)
-* [Forum](http://forum.coronalabs.com/plugin/PLUGIN_NAME)
+* [Forum](http://forum.coronalabs.com/plugin/infantium)
 * [Developers Center](http://docs.infantium.com)
 * [Plugin Publisher](http://www.infantium.com)
