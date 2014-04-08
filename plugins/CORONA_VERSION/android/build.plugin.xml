@@ -110,7 +110,7 @@
         <copy file="./dependencies/android-async-http-1.4.3.jar" todir="bin/pre_merged" />
         <copy file="./dependencies/InfantiumSDK.jar" todir="bin/pre_merged" />
         <copy file="./dependencies/sqlitejdbc-v056.jar" todir="bin/pre_merged" />
-		<jar destfile="bin/${CoronaPluginName}.jar">
+		<jar destfile="./${CoronaPluginName}.jar">
 		  <zipgroupfileset dir="bin/pre_merged" includes="*.jar" /> 
 		  <!-- other options -->
 		</jar>
