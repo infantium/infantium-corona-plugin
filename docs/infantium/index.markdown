@@ -4,7 +4,7 @@
 > __Type__              [library][api.type.library]
 > __Revision__          [REVISION_LABEL](REVISION_URL)
 > __Keywords__          infantium
-> __Sample code__       
+> __Sample code__       [Github Example Code](https://github.com/infantium/infantium-corona-example/blob/master/Corona/main.lua)
 > __See also__          
 > __Availability__      Basic, Pro, Enterprise
 > --------------------- ------------------------------------------------------------------------------------------
