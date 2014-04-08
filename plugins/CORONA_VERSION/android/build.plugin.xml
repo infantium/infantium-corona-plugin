@@ -114,6 +114,6 @@
 		  <zipgroupfileset dir="bin/pre_merged" includes="*.jar" /> 
 		  <!-- other options -->
 		</jar>
-		
+		<delete dir="bin/pre_merged"/>
     </target>
 </project>
