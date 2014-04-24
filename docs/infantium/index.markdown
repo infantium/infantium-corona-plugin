@@ -34,6 +34,8 @@ To use the Infantium service, please [sign up](http://www.infantium.com) for an 
 
 #### [infantium.addElement()][plugin.infantium.addElement]
 
+#### [infantium.addEvent()][plugin.infantium.addEvent]
+
 #### [infantium.addGoal()][plugin.infantium.addGoal]
 
 #### [infantium.addMatchingGoal()][plugin.infantium.addMatchingGoal]

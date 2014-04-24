@@ -8,16 +8,16 @@ import com.naef.jnlua.LuaRuntimeException;
 
 import com.infantium.android.sdk.InfantiumSDK;
 import com.infantium.android.sdk.InfantiumResponse;
+import com.infantium.android.sdk.events.Event;
 import com.infantium.android.sdk.constants.Conf;
 
 import java.lang.IllegalArgumentException;
-import org.json.JSONObject;
 
 import plugin.infantium.LuaLoader;
 
 /** Implements the infantium.init() Lua function. */
-public class NewBasicInteractionFunction implements NamedJavaFunction {
-	private static final String FUNCTION_NAME = "newBasicInteraction";
+public class AddEventFunction implements NamedJavaFunction {
+	private static final String FUNCTION_NAME = "addEvent";
 
 	// Log TAG
 	private static final String LOG_TAG = "Infantium Corona Plugin";
@@ -43,49 +43,27 @@ public class NewBasicInteractionFunction implements NamedJavaFunction {
 	@Override
 	public int invoke(LuaState L) {
 		//Log.d(LOG_TAG, FUNCTION_NAME + " invoke called.");
-		return newBasicInteraction(L);
+		return addEvent(L);
 	}
 	
 	/**
 	 * Method which implements the function logic. The parameters in the stack should be:
-	 * 0: String interaction_type
-	 * 1: String object_type (optional). "" if empty.
-	 * 2: String goal_type
-	 * 3: Integer lifetime (optional). -1 if empty.
-	 * 4: Integer n_concurrent_oks (optional). -1 if empty.
-	 * 5: Integer n_concurrent_kos (optional). -1 if empty.
+	 * 0: String event_id
+	 * 1: String type (optional). "" if empty.
 	 */
-	public int newBasicInteraction(LuaState L) {
+	public int addEvent(LuaState L) {
 		InfantiumResponse resp = InfantiumResponse.EmptyField;
 		
 		try {
-			String interaction_t = L.checkString(1);
-			String object_type = L.checkString(2);
-			String goal_type = L.checkString(3);
-			Integer lifetime = L.checkInteger(4);
-			Integer n_concurrent_oks = L.checkInteger(5);
-			Integer n_concurrent_kos = L.checkInteger(6);
+			String event_id = L.checkString(1);
+			String type = L.checkString(2);
 
-			if ("".equals(object_type)) {
-				object_type = null;
-				if(Conf.D) Log.i(LOG_TAG, "New '" + interaction_t + "' interaction: [" + object_type + ", " + goal_type + "]");
+			Event ev = new Event(event_id);
+			if(!"".equals(type)) {
+				ev.set_t(type);
 			}
 
-			if(lifetime.equals(-1) && n_concurrent_oks.equals(-1) && n_concurrent_kos.equals(-1)) {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type);
-
-			} else if (n_concurrent_oks.equals(-1) && n_concurrent_kos.equals(-1)) {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type, lifetime);
-
-			} else if (lifetime.equals(-1)) {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type, 
-						n_concurrent_oks, n_concurrent_kos);
-
-			} else {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type, lifetime,
-						n_concurrent_oks, n_concurrent_kos);
-
-			}
+			resp = LuaLoader.infantium.addEvent(ev);
 
 			if(InfantiumResponse.Valid.equals(resp)) {
 				if(Conf.D) Log.i(LOG_TAG, FUNCTION_NAME + " successful.");

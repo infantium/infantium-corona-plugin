@@ -8,16 +8,16 @@ import com.naef.jnlua.LuaRuntimeException;
 
 import com.infantium.android.sdk.InfantiumSDK;
 import com.infantium.android.sdk.InfantiumResponse;
+import com.infantium.android.sdk.events.SoundEvent;
 import com.infantium.android.sdk.constants.Conf;
 
 import java.lang.IllegalArgumentException;
-import org.json.JSONObject;
 
 import plugin.infantium.LuaLoader;
 
 /** Implements the infantium.init() Lua function. */
-public class NewBasicInteractionFunction implements NamedJavaFunction {
-	private static final String FUNCTION_NAME = "newBasicInteraction";
+public class AddSoundEventFunction implements NamedJavaFunction {
+	private static final String FUNCTION_NAME = "addSoundEvent";
 
 	// Log TAG
 	private static final String LOG_TAG = "Infantium Corona Plugin";
@@ -43,49 +43,48 @@ public class NewBasicInteractionFunction implements NamedJavaFunction {
 	@Override
 	public int invoke(LuaState L) {
 		//Log.d(LOG_TAG, FUNCTION_NAME + " invoke called.");
-		return newBasicInteraction(L);
+		return addSoundEvent(L);
 	}
 	
 	/**
 	 * Method which implements the function logic. The parameters in the stack should be:
-	 * 0: String interaction_type
-	 * 1: String object_type (optional). "" if empty.
-	 * 2: String goal_type
-	 * 3: Integer lifetime (optional). -1 if empty.
-	 * 4: Integer n_concurrent_oks (optional). -1 if empty.
-	 * 5: Integer n_concurrent_kos (optional). -1 if empty.
+	 * 0: String event_id
+	 * 1: String sound_type (optional). "" if empty.
+	 * 2: String associated_text (optional). "" if empty.
+	 * 3: String language (optional). "" if empty.
+	 * 4: Double imprecise_sound_volume (optional). -1.0 if empty.
+	 * 5: Long duration (optional). -1L if not used.
 	 */
-	public int newBasicInteraction(LuaState L) {
+	public int addSoundEvent(LuaState L) {
 		InfantiumResponse resp = InfantiumResponse.EmptyField;
 		
 		try {
-			String interaction_t = L.checkString(1);
-			String object_type = L.checkString(2);
-			String goal_type = L.checkString(3);
-			Integer lifetime = L.checkInteger(4);
-			Integer n_concurrent_oks = L.checkInteger(5);
-			Integer n_concurrent_kos = L.checkInteger(6);
+			String event_id = L.checkString(1);
+			String type = L.checkString(2);
+			String associated_text = L.checkString(3);
+			String language = L.checkString(4);
+			Double imprecise_sound_volume = L.checkNumber(5);
+			Long duration = new Long(Math.round(L.checkNumber(6)));
 
-			if ("".equals(object_type)) {
-				object_type = null;
-				if(Conf.D) Log.i(LOG_TAG, "New '" + interaction_t + "' interaction: [" + object_type + ", " + goal_type + "]");
+			SoundEvent ev = new SoundEvent(event_id);
+			if(!"".equals(type)) {
+				ev.set_t(type);
+			}
+			if(!"".equals(associated_text) && !"".equals(language)) {
+				ev.set_associated_text(associated_text, language);
+			} else if (!"".equals(associated_text)) {
+				ev.set_associated_text(associated_text);
+			}
+			if(!imprecise_sound_volume.equals(-1.0)) {
+				if(Conf.D) Log.i(LOG_TAG, FUNCTION_NAME + " imprecise_sound_volume set to: " + imprecise_sound_volume);
+				ev.set_imprecise_sound_volume(imprecise_sound_volume);
+			}
+			if(!duration.equals(-1L)) {
+				if(Conf.D) Log.i(LOG_TAG, FUNCTION_NAME + " duration set to: " + duration);
+				ev.set_duration(duration);
 			}
 
-			if(lifetime.equals(-1) && n_concurrent_oks.equals(-1) && n_concurrent_kos.equals(-1)) {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type);
-
-			} else if (n_concurrent_oks.equals(-1) && n_concurrent_kos.equals(-1)) {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type, lifetime);
-
-			} else if (lifetime.equals(-1)) {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type, 
-						n_concurrent_oks, n_concurrent_kos);
-
-			} else {
-				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type, lifetime,
-						n_concurrent_oks, n_concurrent_kos);
-
-			}
+			resp = LuaLoader.infantium.addEvent(ev);
 
 			if(InfantiumResponse.Valid.equals(resp)) {
 				if(Conf.D) Log.i(LOG_TAG, FUNCTION_NAME + " successful.");

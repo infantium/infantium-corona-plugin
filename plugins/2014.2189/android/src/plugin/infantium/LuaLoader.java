@@ -38,9 +38,6 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 	/** Lua registry ID to the Lua function to be called when the ad request finishes. */
 	public static int fListener;
 
-	/** This corresponds to the event name, e.g. [Lua] event.name */
-	private static final String EVENT_NAME = "plugininfantiumevent";
-
 	// Log TAG
 	private static final String LOG_TAG = "Infantium Corona Plugin";
 	
@@ -109,8 +106,11 @@ public class LuaLoader implements JavaFunction, CoronaRuntimeListener {
 			new AddSelectionGoalFunction(),
 			new AddMatchingGoalFunction(),
 			new AddTappingGoalFunction(),
+			new AddEventFunction(),
+			new AddSoundEventFunction(),
 			new StartPlayingFunction(),
 			new NewBasicInteractionFunction(),
+			new TriggerExistingEventFunction(),
 			new SendGameRawdataFunction(),
 			new ReturnToInfantiumAppFunction()
 		};

@@ -19,7 +19,7 @@ Registers an interaction of the kid with the app.
 
 	infantium.newBasicInteraction( interaction_t, object_type, goal_type, lifetime, n_concurrent_oks, n_concurrent_kos )
 
-##### interaction_t ~^(optional)^~
+##### interaction_t ~^(required)^~
 _[String][api.type.String]._ The type of the interaction: "success", "error", "none".
 
 ##### object_type ~^(optional)^~
