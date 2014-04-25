@@ -60,15 +60,15 @@ public class AddSoundEventFunction implements NamedJavaFunction {
 		
 		try {
 			String event_id = L.checkString(1);
-			String type = L.checkString(2);
+			String sound_type = L.checkString(2);
 			String associated_text = L.checkString(3);
 			String language = L.checkString(4);
 			Double imprecise_sound_volume = L.checkNumber(5);
 			Long duration = new Long(Math.round(L.checkNumber(6)));
 
 			SoundEvent ev = new SoundEvent(event_id);
-			if(!"".equals(type)) {
-				ev.set_t(type);
+			if(!"".equals(sound_type)) {
+				ev.set_sound_t(sound_type);
 			}
 			if(!"".equals(associated_text) && !"".equals(language)) {
 				ev.set_associated_text(associated_text, language);

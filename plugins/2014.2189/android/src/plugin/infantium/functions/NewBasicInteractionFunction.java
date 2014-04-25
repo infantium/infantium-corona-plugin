@@ -68,8 +68,8 @@ public class NewBasicInteractionFunction implements NamedJavaFunction {
 
 			if ("".equals(object_type)) {
 				object_type = null;
-				if(Conf.D) Log.i(LOG_TAG, "New '" + interaction_t + "' interaction: [" + object_type + ", " + goal_type + "]");
 			}
+			if(Conf.D) Log.i(LOG_TAG, "New '" + interaction_t + "' interaction: [" + object_type + ", " + goal_type + "]");
 
 			if(lifetime.equals(-1) && n_concurrent_oks.equals(-1) && n_concurrent_kos.equals(-1)) {
 				resp = LuaLoader.infantium.newBasicInteraction(interaction_t, object_type, goal_type);
